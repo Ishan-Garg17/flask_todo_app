@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+<!-- Body content -->
+{% block content %}
+<!-- ADD A TODO -->
+<form class="my-4 container" action="/update/{{recordtoupdate.sno}}" method="POST">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Update Title</label>
+    <input
+      name="title"
+      value= "{{recordtoupdate.title}}"
+      type="text"
+      class="form-control"
+      id="exampleInputEmail1"
+      aria-describedby="emailHelp"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Update Description</label>
+    <input
+      name="descinform"
+      value= "{{recordtoupdate.desc}}"
+      type="text"
+      class="form-control"
+      id="exampleInputPassword1"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+{% endblock %}

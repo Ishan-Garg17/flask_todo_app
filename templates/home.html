@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+<!-- Body content -->
+{% block content %}
+<!-- ADD A TODO -->
+<form class="my-4 container" action="/submit" method="POST">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Add Your Task</label>
+    <input
+    placeholder="Name Your Task"
+      name="title"
+      type="text"
+      class="form-control"
+      id="exampleInputEmail1"
+      aria-describedby="emailHelp"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Description</label>
+    <input
+      name="descinform"
+      placeholder="Details of Your Task"
+      type="text"
+      class="form-control"
+      id="exampleInputPassword1"
+    />
+  </div>
+  <button type="submit" id="form-btn" class="btn btn-primary">Add</button>
+</form>
+
+<!-- TODO CONTAINER -->
+<table class="table my-3 container">
+  <thead>
+    <tr>
+      <th scope="col">Sno.</th>
+      <th scope="col">TODO</th>
+      <th scope="col">Description</th>
+      <th scope="col">Options</th>
+    </tr>
+  </thead>
+
+  {% for data in data%}
+  <tbody>
+    <tr>
+      <th scope="row">{{ loop.index }}</th>
+      <td>{{ data.title }}</td>
+      <td>{{ data.desc }}</td>
+      <td>
+        <a href="/delete/{{data.sno}}"><button type="button" class="btn btn-dark">Delete</button></a>
+        <a href="/update/{{data.sno}}"><button type="button" class="btn btn-dark">Update</button></a>
+      </td>
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+
+{% endblock %}
