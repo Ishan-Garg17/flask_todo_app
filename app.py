@@ -1,11 +1,10 @@
-
 from datetime import datetime
 from turtle import title
 from flask import Flask, redirect, render_template, request  # creating Flask Instance
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-from sqlalchemy import desc
+from sqlalchemy import desc, true
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///TODO.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -13,13 +12,24 @@ db = SQLAlchemy(app)
 
 
 class dataoftodo(db.Model):
-    sno = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     desc = db.Column(db.String(500), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
+
     def __repr__(self) -> str:
-        return f"{self.sno}-{self.title}"
+        return f"{self.id}-{self.title}"
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    notes = db.relationship('dataoftodo',backref='owned_user',lazy=True)
+
+
+
+
+
+
 
 @app.route("/")  # sending same function on both routes
 @app.route("/home")  # Routes
