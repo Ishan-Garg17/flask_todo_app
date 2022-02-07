@@ -1,4 +1,5 @@
 from datetime import datetime
+from email.policy import default
 from turtle import title
 from flask import Flask, redirect, render_template, request  # creating Flask Instance
 from flask_sqlalchemy import SQLAlchemy
@@ -16,15 +17,20 @@ class dataoftodo(db.Model):
     title = db.Column(db.String(200), nullable=False)
     desc = db.Column(db.String(500), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-
+    owner = db.Column(db.Integer(),db.ForeignKey('users.id')) 
+    #All todos will have a specific owner so we specify that by foreign key in that column as that foreign key relates to the Primary key of that USER table
+    #id is the primary key of each table
 
     def __repr__(self) -> str:
         return f"{self.id}-{self.title}"
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String(30),nullable=False,default=True)
     notes = db.relationship('dataoftodo',backref='owned_user',lazy=True)
-
+    
+    def __repr__(self) -> str:
+        return f"{self.id}-{self.user_name}"
 
 
 
