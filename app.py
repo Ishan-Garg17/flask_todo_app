@@ -26,9 +26,9 @@ class dataoftodo(db.Model):
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(30),nullable=False,default=True)
+    user_name = db.Column(db.String(30),nullable=False,unique=True)
     notes = db.relationship('dataoftodo',backref='owned_user',lazy=True)
-    
+
     def __repr__(self) -> str:
         return f"{self.id}-{self.user_name}"
 
