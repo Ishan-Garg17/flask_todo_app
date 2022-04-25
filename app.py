@@ -1,11 +1,9 @@
 from datetime import datetime
 from email.policy import default
-from turtle import title
 from flask import Flask, redirect, render_template, request  # creating Flask Instance
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-from sqlalchemy import desc, true
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///TODO.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -17,20 +15,12 @@ class dataoftodo(db.Model):
     title = db.Column(db.String(200), nullable=False)
     desc = db.Column(db.String(500), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    owner = db.Column(db.Integer(),db.ForeignKey('users.id')) 
+    # owner = db.Column(db.Integer(),db.ForeignKey('user.id')) 
     #All todos will have a specific owner so we specify that by foreign key in that column as that foreign key relates to the Primary key of that USER table
     #id is the primary key of each table
 
     def __repr__(self) -> str:
         return f"{self.id}-{self.title}"
-
-class Users(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(30),nullable=False,unique=True)
-    notes = db.relationship('dataoftodo',backref='owned_user',lazy=True)
-
-    def __repr__(self) -> str:
-        return f"{self.id}-{self.user_name}"
 
 
 
@@ -40,6 +30,9 @@ class Users(db.Model):
 @app.route("/")  # sending same function on both routes
 @app.route("/home")  # Routes
 def home_page():
+    # i = oser(username="Ishan")
+    # db.session.add(i)
+    # db.session.commit()
     data = dataoftodo.query.all()
     return render_template('home.html', data=data)
 
@@ -80,6 +73,11 @@ def update(id):
 
     else:
         return render_template('update.html',recordtoupdate=recordtoupdate)
+
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 if __name__ == "__main__":
     app.run(debug=True, port=80)
